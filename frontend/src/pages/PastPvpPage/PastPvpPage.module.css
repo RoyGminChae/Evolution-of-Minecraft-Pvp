@@ -1,0 +1,6 @@
+.gamemodesContainer{
+    padding-top: var(--site-padding);
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
