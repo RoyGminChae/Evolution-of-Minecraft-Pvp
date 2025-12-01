@@ -1,7 +1,6 @@
 import express from 'express';
-import prisma from '../prisma/prisma.js';
+import { prisma } from '../prisma/prisma.js';
 import gracefulShutdown from '../prisma/shutdown.js';
-import { getAllWith } from './service.js';
 
 const app = express();
 app.use(express.json());
@@ -11,8 +10,7 @@ app.use(express.json());
 // returns json {[correctnames], [incorrectnames]}
 app.post('/quiz', async (req, res) => {
     const pageName = req.query.pageName; 
-    const number = parseInt(req.query.number);
-    const { name, correct } = req.body;
+    const { name, number, correct } = req.body;
 
     // find if the same quiz result for this quiz already exists
     const result = await prisma.quiz.findFirst({
@@ -42,22 +40,26 @@ app.post('/quiz', async (req, res) => {
     }
 
     // return { [correctNames], [incorrectNames] } for this specific question
-    const correctArr = await getAllWith('quiz', {
-            correct: true, 
-            pageName: pageName,
-            number: number, 
-        });
+    const correctArr = await prisma.quiz.findMany({
+            where: {
+                correct: true, 
+                pageName: pageName,
+                number: number, 
+            }
+        })
 
-    const incorrectArr = await getAllWith(`quiz`, {
-            correct: false,
-            pageName: pageName,
-            number: number,
+    const incorrectArr = await prisma.quiz.findMany({
+            where: {
+                correct: false,
+                pageName: pageName,
+                number: number,
+            }
         })
 
     res.json({ correctArr, incorrectArr });
 });
 
-app.get('/comment', async (req, res) => {
+app.post('/comment', async (req, res) => {
     const pageName = req.query.pageName;
     const { name, content } = req.body;
 
@@ -68,8 +70,11 @@ app.get('/comment', async (req, res) => {
             pageName: pageName,
         }
     });
-    const comments = await getAllWith('comment', { pageName: pageName });
-    
+    const comments = await prisma.comment.findMany({
+        where: { pageName: pageName },
+        orderBy: { createdAt: 'desc'}
+    });
+
     res.json(comments);
 });
 

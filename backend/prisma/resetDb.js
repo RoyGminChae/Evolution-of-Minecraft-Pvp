@@ -1,4 +1,4 @@
-import prisma from './prisma.js';
+import { prisma } from './prisma.js';
 
 const table = process.argv[2]; 
 

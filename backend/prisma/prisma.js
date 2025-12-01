@@ -1,11 +1,17 @@
-import 'dotenv/config'
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
+import 'dotenv/config';
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import pkg from 'pg';
 
-const connectionString = process.env.DATABASE_URL;
+const { Pool } = pkg;
 
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+// Connect to Prisma Data Platform Postgres DB
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
 
-export default prisma;
+// Prisma 7+ Postgres adapter
+const adapter = new PrismaPg(pool);
 
+// Export Prisma client instance
+export const prisma = new PrismaClient({ adapter });
