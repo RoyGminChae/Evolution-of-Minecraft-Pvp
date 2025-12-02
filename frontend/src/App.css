@@ -47,5 +47,7 @@ body {
     max-width: 1280px;
     margin-top: 5rem; /*space for fixed header*/
     padding-bottom: 3rem; /* space for content from touching the side and bottom */
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
 }

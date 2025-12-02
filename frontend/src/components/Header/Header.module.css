@@ -41,5 +41,6 @@
 
 .userName{
     color: var(--text);
+    font-size: 1.2rem;
     font-family: 'LowresPixel', sans-serif;
 }

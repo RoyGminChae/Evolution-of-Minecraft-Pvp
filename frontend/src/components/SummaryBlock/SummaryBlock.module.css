@@ -23,7 +23,7 @@
     IMPORTANT using height: 100% will override this 
 */
 .innerContainer { 
-    flex: 0 0 50%;
+    flex: 1 1 50%;
     min-width: 0;
 
     display: flex;

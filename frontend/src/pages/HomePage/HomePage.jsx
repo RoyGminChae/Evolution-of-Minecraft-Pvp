@@ -3,6 +3,7 @@ import styles from './HomePage.module.css';
 import SummaryBlock from '../../components/SummaryBlock/SummaryBlock.jsx';
 import Carousel from '../../components/Carousel/Carousel.jsx';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 const text1 = ` 
     The 1.7/1.8 era is often remembered as the golden age of Minecraft PvP 
@@ -55,7 +56,8 @@ function HomePage() {
                                 {text1}
                             </p>
                         </div>
-                        <Button 
+                        <Link to="/pastPvpPage">
+                            <Button 
                             variant="contained"
                             size="large"
                             sx={{
@@ -65,7 +67,8 @@ function HomePage() {
                                 boxShadow: 'var(--shadow-s)',
                                 fontFamily: "'LowresPixel', sans-serif"
                             }}
-                        >Learn More</Button>
+                            >Learn More</Button>
+                        </Link>
                     </div>
                     <div className={styles.summaryBlockCarouselOuterContainer}>
                         <div className={styles.summaryBlockCarouselInnerContainer}>
@@ -104,7 +107,8 @@ function HomePage() {
                                 {text2}
                             </p>
                         </div>
-                        <Button 
+                        <Link to="/postPvpPage">
+                            <Button 
                             variant="contained"
                             size="large"
                             sx={{
@@ -114,26 +118,27 @@ function HomePage() {
                                 boxShadow: 'var(--shadow-s)',
                                 fontFamily: "'LowresPixel', sans-serif"
                             }}
-                        >Learn More</Button>
+                            >Learn More</Button>
+                        </Link>
                     </div>
                     <div className={styles.summaryBlockCarouselOuterContainer}>
                         <div className={styles.summaryBlockCarouselInnerContainer}>
                             <Carousel>
                                 <div className={styles.imageContainer}>
-                                    <img className={styles.image} src="/pot.png" />
-                                    <p className={styles.text}>Pot PVP</p>
+                                    <img className={styles.image} src="/macePic.png" />
+                                    <p className={styles.text}>Mace PVP</p>
                                 </div>
                                 <div className={styles.imageContainer}>
-                                    <img className={styles.image} src="/uhc.png" />
-                                    <p className={styles.text}>UHC PVP</p>
+                                    <img className={styles.image} src="/endPic.jpg" />
+                                    <p className={styles.text}>End Crystal PVP</p>
                                 </div>
                                 <div className={styles.imageContainer}>
-                                    <img className={styles.image} src="/mcsg.png" />
-                                    <p className={styles.text}>MCSG PVP</p>
+                                    <img className={styles.image} src="/swordPic.png" />
+                                    <p className={styles.text}>Sword PVP</p>
                                 </div>
                                 <div className={styles.imageContainer}>
-                                    <img className={styles.image} src="/soup.png" />
-                                    <p className={styles.text}>Soup PVP</p>
+                                    <img className={styles.image} src="/axePic.png" />
+                                    <p className={styles.text}>Axe PVP</p>
                                 </div>
                             </Carousel>
                         </div>

@@ -1,9 +1,11 @@
 import express from 'express';
 import { prisma } from '../prisma/prisma.js';
 import gracefulShutdown from '../prisma/shutdown.js';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors()) // any clients can make calls to my backend
 
 // quiz
 // adds or updates the database based on the result
@@ -45,7 +47,8 @@ app.post('/quiz', async (req, res) => {
                 correct: true, 
                 pageName: pageName,
                 number: number, 
-            }
+            },
+            select: { name: true, id: true}
         })
 
     const incorrectArr = await prisma.quiz.findMany({
@@ -53,7 +56,8 @@ app.post('/quiz', async (req, res) => {
                 correct: false,
                 pageName: pageName,
                 number: number,
-            }
+            },
+            select: { name: true, id: true}
         })
 
     res.json({ correctArr, incorrectArr });
@@ -77,6 +81,15 @@ app.post('/comment', async (req, res) => {
 
     res.json(comments);
 });
+
+app.get('/comment', async (req, res) => {
+    const pageName = req.query.pageName;
+    const comments = await prisma.comment.findMany({
+        where: { pageName: pageName },
+        orderBy: { createdAt: 'desc' }
+    });
+    res.json(comments);
+})
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

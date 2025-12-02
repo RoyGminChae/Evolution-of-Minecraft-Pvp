@@ -1,15 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './QuestionCard.module.css';
 import Button from '@mui/material/Button';
+import { useUserContext } from '../../context.jsx';
+import HoverCardInside from '../HoverCard/HoverCardInside.jsx';
+import { HoverCard, HoverCardContent, HoverCardTrigger} from '../animate-ui/components/radix/hover-card.jsx';
 
-export default function QuestionCard({ question, choices, correctIndex }) {
+export default function QuestionCard({ question, choices, correctIndex, pageName, questionNumber }) {
     const [selected, setSelected] = useState(null);
     const [feedback, setFeedback] = useState('');
-    
+    const [pollData, setPollData] = useState(null); // { correctArr, incorrectArr }
+    const { username, setPopUpExists } = useUserContext();
+
     function handleChoice(idx) {
+        if (!username) {
+            setPopUpExists(true);
+            return;
+        }
+
         setSelected(idx);
         setFeedback(idx === correctIndex ? 'Correct' : 'Incorrect');
     }
+
+    // if selected value change, then backend is called
+    useEffect(() => {
+        if (selected === null)
+            return;
+
+        (async () => {
+            const res = await fetch(`http://localhost:3000/quiz?pageName=${pageName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: username,
+                    number: questionNumber,
+                    correct: selected === correctIndex
+                })
+            })
+            const data = await res.json();
+            console.log(data);
+            setPollData(data); // { correctArr, incorrectArr }
+        })();
+    }, [selected]);
 
     return (
         <div className={styles.card}>
@@ -33,9 +66,17 @@ export default function QuestionCard({ question, choices, correctIndex }) {
                 ))}
             </div>
 
-            {selected !== null && (
-            <div className={styles.feedback}>
-                {feedback}
+            {selected !== null && pollData !== null &&(
+            <div className={styles.resultContainer}>
+                <p className={styles.feedbackText}>{feedback}</p>
+                <HoverCard>
+                    <HoverCardTrigger>
+                        <img className={styles.pollingIcon} src="/polling.png"/>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                        <HoverCardInside correctArr={pollData.correctArr} incorrectArr={pollData.incorrectArr} />
+                    </HoverCardContent>
+                </HoverCard>
             </div>
             )}
         </div>

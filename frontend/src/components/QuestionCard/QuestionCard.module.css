@@ -21,9 +21,19 @@
   
 }
 
-.feedback {
+.resultContainer{
   margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.feedbackText {
   font-size: 1.1rem;
   font-weight: bold;
   color: var(--text);
+}
+
+.pollingIcon {
+  width: 3rem;
+  object-fit: cover;
 }
